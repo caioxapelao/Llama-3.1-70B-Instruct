@@ -1,2 +1,2 @@
-nodriver
-asyncio
+g4f
+curl_cffi
