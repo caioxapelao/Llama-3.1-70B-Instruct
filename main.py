@@ -1,17 +1,16 @@
-import nodriver as uc
-import asyncio
+from g4f.client import Client
+from g4f.Provider import HuggingChat
 
-async def main(prompt, wtime):
-    driver = await uc.start()
-    tab = await driver.get('https://huggingface.co/chat/')
+client = Client(
+    provider = HuggingChat
+)
 
-    txtarea = await tab.select('textarea.scrollbar-custom')
-    await txtarea.send_keys(prompt)
-    submitbtn = await tab.select('.mx-1')
-    await submitbtn.click()
-    await tab.sleep(wtime)
-    results = await tab.select('.prose')
-    print(results.text)
+def generate(prompt):
+    chat_completion = client.chat.completions.create(
+        model="meta-llama/Meta-Llama-3.1-70B-Instruct",
+        messages=[{"role": "user", "content": prompt}],
+    )
 
-uc.loop().run_until_complete(main("Hello! How are you doing?", 5))
-    
+    print(chat_completion.choices[0].message.content or "")
+
+generate('Hello! How are you doing?')
